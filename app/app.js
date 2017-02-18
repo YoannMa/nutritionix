@@ -1,18 +1,24 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('nutritionix', [
     'ngRoute',
+    'ngMaterial',
+    'ngAnimate',
     'nix.api',
-    'myApp.view1',
-    'myApp.view2',
-    'myApp.version'
+    'nutritionix.view1',
+    'nutritionix.view2',
+    'nutritionix.version'
 ]).config([
     '$locationProvider', '$routeProvider', 'nixApiProvider', function ($locationProvider, $routeProvider, nixApiProvider) {
         $locationProvider.hashPrefix('!');
         
-        $routeProvider.otherwise({ redirectTo : '/view1' });
+        $routeProvider.otherwise({ redirectTo : '/home' });
         
-        nixApiProvider.setApiCredentials('a1dae454', '11d2ef2c51fc274cf359a274a1cc2df0');
+        nixApiProvider.setApiCredentials('81074c61', 'd2fc5d0a8959ac2066130942e7a40e5d');
     }
-]);
+])
+.constant('_', window._)
+.run(function ($rootScope) {
+    $rootScope._ = window._;
+});

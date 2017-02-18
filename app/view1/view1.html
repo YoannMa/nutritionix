@@ -1,6 +1,54 @@
-<p>This is the partial for view 1.</p>
-<ul>
-    <li ng-repeat="(index, item) in researchedItem">
-        <span>{{ item.id }}</span> : <span>{{ item.text }}</span>
-    </li>
-</ul>
+<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar _md _md-toolbar-transitions">
+    <div class="md-toolbar-tools">
+        <h2 class="md-flex">Search</h2>
+    </div>
+</md-toolbar>
+<md-content class="md-padding">
+    <form ng-submit="$event.preventDefault()" name="searchForm">
+        <p>The following input allow you to search in the database any kind of aliments.</p>
+        <div layout-gt-sm="row">
+            <md-autocomplete flex
+                    md-no-cache="false"
+                    md-input-name="autoCompleteField"
+                    md-search-text="autoCompleteSearchText"
+                    md-selected-item="selectedItem"
+                    md-selected-item-change="selectedItemChange(selectedItem)"
+                    md-items="item in autoCompleteQuerySearch(autoCompleteSearchText)"
+                    md-item-text="item.text"
+                    md-input-minlength="1"
+                    placeholder="Search aliment">
+                <md-item-template>
+                    <span md-highlight-text="autoCompleteSearchText">{{ item.text }}</span>
+                </md-item-template>
+                <md-not-found>
+                    No aliments matching ' {{autoCompleteSearchText}} ' were found.
+                </md-not-found>
+                <div ng-messages="searchForm.autoCompleteField.$error" ng-if="searchForm.autoCompleteField.$touched">
+                    <div ng-message="minlength">Your entry is not long enough.</div>
+                </div>
+            </md-autocomplete>
+        </div>
+    </form>
+    <md-grid-list
+            md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6"
+            md-row-height-gt-md="1:1" md-row-height="4:3"
+            md-gutter="8px" md-gutter-gt-sm="4px" >
+
+        <md-grid-tile ng-repeat="item in foundResults" md-colspan-sm="1" md-colspan-xs="1">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{item.item_name }}</span>
+                        <span class="md-subhead">{{item.brand_name}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <img ng-src="{{ item.thumbnail }}" class="md-media-sm card-media"/>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button>TODO</md-button>
+                </md-card-actions>
+            </md-card>
+        </md-grid-tile>
+    </md-grid-list>
+</md-content>
