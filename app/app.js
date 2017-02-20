@@ -6,7 +6,7 @@ angular.module('nutritionix', [
     'ngMaterial',
     'ngAnimate',
     'nix.api',
-    'nutritionix.view1',
+    'nutritionix.searchView',
     'nutritionix.view2',
     'nutritionix.version'
 ]).config([

@@ -1,27 +1,25 @@
 'use strict';
 
-angular.module('nutritionix.view1', [ 'ngRoute' ])
+angular.module('nutritionix.searchView', [ 'ngRoute' ])
     .config([
         '$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/view1', {
-                templateUrl : 'view1/view1.html',
-                controller  : 'View1Ctrl'
+            $routeProvider.when('/home', {
+                templateUrl : 'searchView/view.html',
+                controller  : 'searchViewController'
             });
         }
     ])
-    .controller('View1Ctrl', [
+    .controller('searchViewController', [
         '$scope',
         'nixApi',
         '$q',
         function ($scope, nixApi, $q) {
-            var autoCompleteController = this;
-    
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
             $scope.searchedItem           = undefined;
             $scope.foundResults = [];
             $scope.selectedItemChange = function (selectedItem) {
-                var bulkSize = 10;
+                var bulkSize = 25;
                 if (!selectedItem) {
                     $scope.searchedItem = undefined;
                     return;
@@ -29,17 +27,17 @@ angular.module('nutritionix.view1', [ 'ngRoute' ])
                 nixApi.search(selectedItem.text, bulkSize, 0).success(function (search) {
                     $scope.foundResults = search.results;
                     console.log(search.results.length + ' out of ' + search.total);
-                    var offset = search.results.length;
+                    //var offset = search.results.length;
                         
-                    while (offset < search.total) {
-                        nixApi.search(selectedItem.text, bulkSize, offset).success(function (search) {
-                            search.results.forEach(function (items) {
-                                $scope.foundResults.push(items);
-                            })
-                        });
-                        console.log(offset + ' out of ' + search.total);
-                        offset += bulkSize;
-                    }
+                    //while (offset < search.total) {
+                    //    nixApi.search(selectedItem.text, bulkSize, offset).success(function (search) {
+                    //        search.results.forEach(function (items) {
+                    //            $scope.foundResults.push(items);
+                    //        })
+                    //    });
+                    //    console.log(offset + ' out of ' + search.total);
+                    //    offset += bulkSize;
+                    //}
                 });
             };
             
