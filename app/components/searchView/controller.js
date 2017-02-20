@@ -4,7 +4,7 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
     .config([
         '$routeProvider', function ($routeProvider) {
             $routeProvider.when('/home', {
-                templateUrl : 'searchView/view.html',
+                templateUrl : 'app/components/searchView/view.html',
                 controller  : 'searchViewController'
             });
         }
@@ -13,7 +13,7 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
         '$scope',
         'nixApi',
         '$q',
-        function ($scope, nixApi, $q) {
+        function ($scope, nixApi) {
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
             $scope.searchedItem           = undefined;
