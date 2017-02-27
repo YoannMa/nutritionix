@@ -20,7 +20,7 @@
                 <span md-highlight-text="autoCompleteSearchText">{{ item.text }}</span>
             </md-item-template>
             <md-not-found>
-                No aliments matching ' {{autoCompleteSearchText}} ' were found.
+                No aliments matching ' {{ autoCompleteSearchText }} ' were found.
             </md-not-found>
             <div ng-messages="searchForm.autoCompleteField.$error" ng-if="searchForm.autoCompleteField.$touched">
                 <div ng-message="minlength">Your entry is not long enough.</div>
@@ -32,8 +32,8 @@
     <md-card ng-repeat="item in foundResults">
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">{{item.item_name }}</span>
-                <span class="md-subhead">{{item.brand_name}}</span>
+                <span class="md-headline">{{ item.item_name }}</span>
+                <span class="md-subhead">{{ item.brand_name}}</span>
             </md-card-title-text>
             <md-card-title-media>
                 <img ng-src="{{ item.thumbnail }}" class="md-media-sm card-media"/>
@@ -43,4 +43,7 @@
             <md-button>TODO</md-button>
         </md-card-actions>
     </md-card>
+    <section layout="row" layout-padding layout-align="center center" layout-fill ng-if="paging.total">
+        <pagination cl-pages="paging.total" cl-steps="6" cl-page-changed="changePage()" cl-current-page="paging.current"></pagination>
+    </section>
 </md-content>

@@ -11,34 +11,48 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
     ])
     .controller('searchViewController', [
         '$scope',
+        '$location',
         'nixApi',
-        '$q',
-        function ($scope, nixApi) {
+        function ($scope, $location, nixApi) {
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
-            $scope.searchedItem           = undefined;
-            $scope.foundResults = [];
+            $scope.selectedItem           = $location.search().item ? { text : $location.search().item } : undefined;
+            $scope.foundResults           = [];
+            
             $scope.selectedItemChange = function (selectedItem) {
-                var bulkSize = 25;
                 if (!selectedItem) {
                     $scope.searchedItem = undefined;
                     return;
                 }
-                nixApi.search(selectedItem.text, bulkSize, 0).success(function (search) {
-                    $scope.foundResults = search.results;
-                    console.log(search.results.length + ' out of ' + search.total);
-                    //var offset = search.results.length;
-                        
-                    //while (offset < search.total) {
-                    //    nixApi.search(selectedItem.text, bulkSize, offset).success(function (search) {
-                    //        search.results.forEach(function (items) {
-                    //            $scope.foundResults.push(items);
-                    //        })
-                    //    });
-                    //    console.log(offset + ' out of ' + search.total);
-                    //    offset += bulkSize;
-                    //}
+                $scope.selectedItem = selectedItem;
+                $location.search({
+                    item : selectedItem.text,
+                    page : 1
                 });
+            };
+            
+            $scope.paging = {
+                total         : 0,
+                current       : $location.search().page ? $location.search().page : 1,
+                onPageChanged : $scope.reloadListResults,
+            };
+            
+            $scope.changePage = function () {
+                $location.search({
+                    item : $scope.selectedItem.text,
+                    page : $scope.paging.current
+                });
+                
+            };
+            
+            $scope.reloadListResults = function () {
+                var bulkSize = 25;
+                nixApi.search($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
+                    .success(function (search) {
+                        $scope.foundResults = search.results;
+                        $scope.paging.total = Math.min(Math.floor(search.total / bulkSize), (1000 / bulkSize) + 1);
+                        // Math.min is used to limit the offset to 1000, the API won't respond if the offset is superior from 1000
+                    });
             };
             
             $scope.autoCompleteQuerySearch = function (query) {
@@ -46,20 +60,9 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
                     return result.data
                 });
             };
-            //$scope.search           = function () {
-            //    nixApi.autocomplete($scope.searchText).success(function (suggestions) {
-            //        suggestions.forEach(suggestion => {
-            //            $scope.researchedItem.push(suggestion);
-            //            nixApi.search(suggestion.name).success(function (search) {
-            //                search.results.forEach(item => {
-            //                    $scope.researchedItem.push(item);
-            //                    //nixApi.item(item.resource_id).success(function (item) {
-            //                    //
-            //                    //})
-            //                });
-            //            });
-            //        });
-            //    });
-            //};
+            
+            if ($location.search().item && $location.search().item !== '') {
+                $scope.reloadListResults();
+            }
         }
     ]);
