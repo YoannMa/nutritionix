@@ -20,7 +20,7 @@
  */
 
 /**
- * Based on Crawlink version, modified by YoannMA
+ * Based on Crawlink version, modified by Yoannma
  */
 
 (function () {
@@ -35,20 +35,20 @@
         return {
             restrict     : 'EA',
             scope        : {
-                clPages       : '=',
-                clAlignModel  : '=',
-                clPageChanged : '&',
-                clSteps       : '=',
-                clCurrentPage : '='
+                ymPages        : '=',
+                ymAlignModel   : '=',
+                ymPageChanged  : '&',
+                ymNbrPageShown : '=',
+                ymCurrentPage  : '='
             },
             controller   : PaginationController,
             controllerAs : 'vm',
             template     : [
-                '<md-button class="md-icon-button md-raised md-warn" aria-label="First" ng-hide="vm.pageArray().shift() == 1" ng-click="vm.gotoFirst()">{{ vm.first }}</md-button>',
-                '<md-button class="md-icon-button md-raised md-primary" aria-label="Previous" ng-click="vm.gotoPrev()" ng-show="clCurrentPage > 1">{{ vm.previous }}</md-button>',
-                '<md-button class="md-icon-button md-raised" aria-label="Go to page {{ i }}" ng-repeat="i in vm.pageArray()" ng-click="vm.goto(i)" ng-class="{\'md-primary\': i == clCurrentPage}"> {{ i }} </md-button>',
-                '<md-button class="md-icon-button md-raised md-primary" aria-label="Next" ng-click="vm.gotoNext()" ng-show="clCurrentPage < clPages">{{ vm.next }}</md-button>',
-                '<md-button class="md-icon-button md-raised md-warn" aria-label="Last" ng-click="vm.gotoLast()" ng-hide="vm.pageArray().pop() == clPages">{{ vm.last }}</md-button>',
+                '<md-button class="md-icon-button md-raised md-warn" aria-label="First" ng-hide="vm.pageArray().shift() == 1" ng-click="vm.gotoFirst()"><i class="material-icons">first_page</i></md-button>',
+                '<md-button class="md-icon-button md-raised md-primary" aria-label="Previous" ng-click="vm.gotoPrev()" ng-show="ymCurrentPage > 1"><i class="material-icons">navigate_before</i></md-button>',
+                '<md-button class="md-icon-button md-raised" aria-label="Go to page {{ i }}" ng-repeat="i in vm.pageArray()" ng-click="vm.goto(i)" ng-class="{\'md-primary\': i == ymCurrentPage}"> {{ i }} </md-button>',
+                '<md-button class="md-icon-button md-raised md-primary" aria-label="Next" ng-click="vm.gotoNext()" ng-show="ymCurrentPage < ymPages"><i class="material-icons">navigate_next</i></md-button>',
+                '<md-button class="md-icon-button md-raised md-warn" aria-label="Last" ng-click="vm.gotoLast()" ng-hide="vm.pageArray().pop() == ymPages"><i class="material-icons">last_page</i></md-button>',
             ].join('')
         };
     }
@@ -57,43 +57,37 @@
     function PaginationController($scope) {
         var vm = this;
         
-        vm.first    = '<<';
-        vm.last     = '>>';
-        vm.previous = '<';
-        vm.next     = '>';
-        
-        vm.index = 0;
-        
-        vm.clSteps = $scope.clSteps;
-        
         vm.pageArray = function () {
-            var before = _.range(Math.max($scope.clCurrentPage - 4, 1), $scope.clCurrentPage + 6);
-            var after = _.range($scope.clCurrentPage - 5, Math.min(parseInt($scope.clPages) + 1, parseInt($scope.clCurrentPage) + 5));
-            return _.intersection(before, after);
+            var nbr = parseInt($scope.ymNbrPageShown);
+            
+            return _.intersection(
+                _.range(Math.max($scope.ymCurrentPage - nbr, 1), $scope.ymCurrentPage + (nbr + 2)),
+                _.range($scope.ymCurrentPage - (nbr + 1), Math.min(parseInt($scope.ymPages) + 1, parseInt($scope.ymCurrentPage) + (nbr + 1)))
+            );
         };
         
         vm.goto = function (page) {
-            $scope.clCurrentPage = page;
+            $scope.ymCurrentPage = page;
         };
         
         vm.gotoPrev = function () {
-            $scope.clCurrentPage--;
+            $scope.ymCurrentPage--;
         };
         
         vm.gotoNext = function () {
-            $scope.clCurrentPage++;
+            $scope.ymCurrentPage++;
         };
         
         vm.gotoFirst = function () {
-            $scope.clCurrentPage = 1;
+            $scope.ymCurrentPage = 1;
         };
         
         vm.gotoLast = function () {
-            $scope.clCurrentPage = $scope.clPages;
+            $scope.ymCurrentPage = $scope.ymPages;
         };
         
-        $scope.$watch('clCurrentPage', function () {
-            $scope.clPageChanged();
+        $scope.$watch('ymCurrentPage', function () {
+            $scope.ymPageChanged();
         });
     }
 })();
