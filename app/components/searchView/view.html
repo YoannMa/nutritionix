@@ -36,10 +36,10 @@
             </md-card-title-media>
         </md-card-title>
         <md-card-actions layout="row" layout-align="end center">
-            <md-button>TODO</md-button>
+            <md-button ng-click="showItemInfo($event, item)">Info</md-button>
         </md-card-actions>
     </md-card>
 </md-content>
 <section md-whiteframe="4" layout="row" layout-padding layout-align="center center" layout-fill ng-if="paging.total">
-    <pagination ym-pages="paging.total" ym-page-changed="changePage()" ym-nbr-page-shown="5" ym-current-page="paging.current"></pagination>
+    <pagination ym-pages="paging.total" ym-page-changed="changePage()" ym-nbr-page-shown="4" ym-current-page="paging.current"></pagination>
 </section>

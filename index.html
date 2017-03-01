@@ -27,9 +27,15 @@
                 </div>
             </md-toolbar>
         </header>
-        <md-content flex role="navigation">
-
-        </md-content>
+        <section ng-controller="MenuCtrl">
+            <ul class="side-menu">
+                <li ng-repeat="item in menu">
+                    <md-button class="md-button md-ink-ripple" ng-href="{{ item.url }}">
+                        <i layout-align="center center"  class="material-icons">{{ item.icone }}</i><span layout-align="center center">{{item.title}}</span>
+                    </md-button>
+                </li>
+            </ul>
+        </section>
     </md-sidenav>
 
     <div layout="column" tabIndex="-1" role="main" flex>
@@ -39,7 +45,7 @@
                     <i class="material-icons">menu</i>
                 </md-button>
                 <div layout="row" flex class="fill-height">
-                    <h2 class="md-toolbar-item md-headline">{{ menu.currentSection.name }}</h2>
+                    <h2 class="md-toolbar-item md-headline">Search</h2>
                 </div>
             </div>
         </md-toolbar>
@@ -56,8 +62,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
     <script src="//cdn.rawgit.com/nutritionix/library-angular/master/angular-nutritionix-api.js"></script>
     <script src="app/app.js"></script>
+    <script src="app/components/menu/menu.js"></script>
     <script src="app/components/searchView/controller.js"></script>
-    <script src="app/components/view2/view2.js"></script>
     <script src="app/components/version/version.js"></script>
     <script src="app/components/version/version-directive.js"></script>
     <script src="app/components/version/interpolate-filter.js"></script>
