@@ -4,7 +4,7 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
     .config([
         '$routeProvider', function ($routeProvider) {
             $routeProvider.when('/home', {
-                templateUrl : 'app/components/searchView/view.html',
+                templateUrl : 'app/searchView/view.html',
                 controller  : 'searchViewController'
             });
         }
