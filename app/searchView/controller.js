@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('nutritionix.searchView', [ 'ngRoute' ])
+angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
     .config([
         '$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/home', {
-                templateUrl : 'app/searchView/view.html',
+            $routeProvider.when('/search', {
+                templateUrl : 'app/components/searchView/view.html',
                 controller  : 'searchViewController'
             });
         }
@@ -13,12 +13,13 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
         '$scope',
         '$location',
         'nixApi',
-        function ($scope, $location, nixApi) {
+        '$mdDialog',
+        function ($scope, $location, nixApi, $mdDialog) {
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
             $scope.selectedItem           = $location.search().item ? { text : $location.search().item } : undefined;
             $scope.foundResults           = [];
-            $scope.paging = {
+            $scope.paging                 = {
                 total         : 0,
                 current       : $location.search().page ? $location.search().page : 1,
                 onPageChanged : $scope.reloadListResults,
@@ -43,7 +44,6 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
                     item : $scope.selectedItem.text,
                     page : $scope.paging.current
                 });
-                
             };
             
             $scope.reloadListResults = function () {
@@ -61,9 +61,42 @@ angular.module('nutritionix.searchView', [ 'ngRoute' ])
                     return result.data
                 });
             };
-    
+            
+            $scope.showItemInfo = function (ev, item) {
+                $mdDialog.show({
+                    controller          : DialogController,
+                    templateUrl         : 'app/components/searchView/itemInfo.tmpl.html',
+                    parent              : angular.element(document.body),
+                    targetEvent         : ev,
+                    clickOutsideToClose : true,
+                    locals : {
+                        item : item
+                    }
+                })
+                    .then(function (answer) {
+                        console.log(answer);
+                    }, function () {
+                        $scope.status = 'You cancelled the dialog.';
+                    });
+            };
+            
             if ($location.search().item && $location.search().item !== '') {
                 $scope.reloadListResults();
+            }
+            
+            function DialogController($scope, $mdDialog, item) {
+                $scope.item = item;
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
+                
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+                
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
             }
         }
     ]);
