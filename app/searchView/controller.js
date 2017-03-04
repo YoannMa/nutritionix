@@ -4,7 +4,7 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
     .config([
         '$routeProvider', function ($routeProvider) {
             $routeProvider.when('/search', {
-                templateUrl : 'app/components/searchView/view.html',
+                templateUrl : 'app/searchView/view.html',
                 controller  : 'searchViewController'
             });
         }
@@ -58,45 +58,41 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
             
             $scope.autoCompleteQuerySearch = function (query) {
                 return nixApi.autocomplete(query).then(function (result) {
-                    return result.data
+                    return _.sortBy(result.data, 'text');
                 });
             };
             
             $scope.showItemInfo = function (ev, item) {
-                $mdDialog.show({
-                    controller          : DialogController,
-                    templateUrl         : 'app/components/searchView/itemInfo.tmpl.html',
-                    parent              : angular.element(document.body),
-                    targetEvent         : ev,
-                    clickOutsideToClose : true,
-                    locals : {
-                        item : item
-                    }
-                })
-                    .then(function (answer) {
-                        console.log(answer);
-                    }, function () {
-                        $scope.status = 'You cancelled the dialog.';
-                    });
+                $mdDialog.show(
+                    $mdDialog.infoDialog({
+                        targetEvent : ev,
+                        locals      : {
+                            item : item
+                        }
+                    })
+                ).then(function () {
+                    console.log();
+                }, function () {
+                    $scope.status = 'You cancelled the dialog.';
+                });
             };
             
             if ($location.search().item && $location.search().item !== '') {
                 $scope.reloadListResults();
             }
             
-            function DialogController($scope, $mdDialog, item) {
-                $scope.item = item;
-                $scope.hide = function () {
-                    $mdDialog.hide();
-                };
-                
-                $scope.cancel = function () {
-                    $mdDialog.cancel();
-                };
-                
-                $scope.answer = function (answer) {
-                    $mdDialog.hide(answer);
-                };
-            }
+            $scope.addItem = function (ev, item) {
+                $mdDialog.show(
+                    $mdDialog.quantityDialog({
+                        targetEvent : ev,
+                        locals      : {
+                            item     : item
+                        }
+                    })
+                ).then(function (quantity) {
+                    console.log(quantity);
+                    // todo add to pantry
+                });
+            };
         }
     ]);

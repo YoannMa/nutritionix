@@ -27,12 +27,12 @@
                 </div>
             </md-toolbar>
         </header>
-        <section ng-controller="MenuCtrl">
+        <section layout="row" layout-wrap ng-controller="MenuCtrl">
             <ul class="side-menu">
-                <li ng-repeat="item in menu">
-                    <md-button class="md-button md-ink-ripple" ng-href="{{ item.url }}">
+                <li flex="100" ng-repeat="item in menu">
+                    <a class="md-button md-ink-ripple" ng-href="{{ item.url }}">
                         <i layout-align="center center"  class="material-icons">{{ item.icone }}</i><span layout-align="center center">{{item.title}}</span>
-                    </md-button>
+                    </a>
                 </li>
             </ul>
         </section>
@@ -62,11 +62,15 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
     <script src="//cdn.rawgit.com/nutritionix/library-angular/master/angular-nutritionix-api.js"></script>
     <script src="app/app.js"></script>
-    <script src="app/components/searchView/controller.js"></script>
-    <script src="app/components/view2/view2.js"></script>
+    <script src="app/searchView/controller.js"></script>
     <script src="app/components/version/version.js"></script>
     <script src="app/components/version/version-directive.js"></script>
     <script src="app/components/version/interpolate-filter.js"></script>
     <script src="app/components/pagination/pagination.js"></script>
+    <script src="app/components/dialogs/infoDialog.js"></script>
+    <script src="app/components/dialogs/quantityDialog.js"></script>
+    <script src="app/components/pantry/pantry.service.js"></script>
+    <script src="app/components/profile/profile.service.js"></script>
+    <script src="app/components/menu/menu.js"></script>
 </body>
 </html>
