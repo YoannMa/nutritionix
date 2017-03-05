@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
+angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial', 'nutritionix.pantry' ])
     .config([
         '$routeProvider', function ($routeProvider) {
             $routeProvider.when('/search', {
@@ -12,9 +12,10 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
     .controller('searchViewController', [
         '$scope',
         '$location',
-        'nixApi',
+        'nutritionixApi',
         '$mdDialog',
-        function ($scope, $location, nixApi, $mdDialog) {
+        'PantryService',
+        function ($scope, $location, nutritionixApi, $mdDialog, PantryService) {
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
             $scope.selectedItem           = $location.search().item ? { text : $location.search().item } : undefined;
@@ -48,16 +49,20 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
             
             $scope.reloadListResults = function () {
                 var bulkSize = 24;
-                nixApi.search($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
+                nutritionixApi.search($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
                     .success(function (search) {
                         $scope.foundResults = search.results;
                         $scope.paging.total = Math.floor(Math.min(search.total / bulkSize, (1000 / bulkSize) + 1));
                         // Math.min is used to limit the offset to 1000, the API won't respond if the offset is superior from 1000
                     });
+                nutritionixApi.searchV1($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
+                    .success(function (search) {
+                        console.log(search);
+                    });
             };
             
             $scope.autoCompleteQuerySearch = function (query) {
-                return nixApi.autocomplete(query).then(function (result) {
+                return nutritionixApi.autocomplete(query).then(function (result) {
                     return _.sortBy(result.data, 'text');
                 });
             };
@@ -70,11 +75,7 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
                             item : item
                         }
                     })
-                ).then(function () {
-                    console.log();
-                }, function () {
-                    $scope.status = 'You cancelled the dialog.';
-                });
+                );
             };
             
             if ($location.search().item && $location.search().item !== '') {
@@ -86,12 +87,11 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
                     $mdDialog.quantityDialog({
                         targetEvent : ev,
                         locals      : {
-                            item     : item
+                            item : item
                         }
                     })
                 ).then(function (quantity) {
-                    console.log(quantity);
-                    // todo add to pantry
+                    PantryService.add(item, quantity);
                 });
             };
         }

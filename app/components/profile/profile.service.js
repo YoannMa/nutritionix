@@ -1,64 +1,82 @@
 'use strict';
 
-angular.module('nutritionix.profile', []).factory([ ProfileService ]);
+angular.module('nutritionix.profile', [ 'ngStorage' ]).factory('ProfileService', ProfileService);
 
-function ProfileService() {
+ProfileService.$inject = [ '$localStorage' ];
+
+function ProfileService($localStorage) {
     var data = {
         weight   : 0,
         height   : 0,
-        male     : true,
+        gender   : true,
         age      : 0,
         sportive : true
     };
     
-    this.setWeight = function (weight) {
+    ProfileService.setWeight = function (weight) {
         data.weight = weight;
         this.sync();
     };
     
-    this.getWeight = function () {
+    ProfileService.getWeight = function () {
         return data.weight;
     };
     
-    this.setHeight = function (height) {
+    ProfileService.setHeight = function (height) {
         data.height = height;
         this.sync();
     };
     
-    this.getHeight = function () {
+    ProfileService.getHeight = function () {
         return data.height;
     };
     
-    this.setMale = function (male) {
-        data.male = male;
+    /**
+     *
+     * I sexually Identify as an Attack Helicopter.
+     * Ever since I was a boy I dreamed of soaring over the oilfields dropping hot sticky loads on disgusting foreigners.
+     * People say to me that a person being a helicopter is Impossible and I’m fucking retarded but I don’t care, I’m beautiful.
+     * I’m having a plastic surgeon install rotary blades, 30 mm cannons and AMG-114 Hellfire missiles on my body.
+     * From now on I want you guys to call me “Apache” and respect my right to kill from above and kill needlessly.
+     * If you can’t accept me you’re a heliphobe and need to check your vehicle privilege.
+     * Thank you for being so understanding.
+     *
+     * @param gender
+     */
+    ProfileService.setGender = function (gender) {
+        data.gender = gender;
         this.sync();
     };
     
-    this.getMale = function () {
-        return data.male;
+    ProfileService.getGender = function () {
+        return data.gender;
     };
     
-    this.setAge = function (age) {
+    ProfileService.setAge = function (age) {
         data.age = age;
         this.sync();
     };
     
-    this.getAge = function () {
+    ProfileService.getAge = function () {
         return data.age;
     };
     
-    this.setSportive = function (sportive) {
+    ProfileService.setSportive = function (sportive) {
         data.sportive = sportive;
         this.sync();
     };
     
-    this.getSportive = function () {
+    ProfileService.getSportive = function () {
         return data.sportive;
     };
     
-    this.sync = function () {
-        // sync with local storage
+    ProfileService.sync = function () {
+        $localStorage.profile = data;
     };
+    
+    if ($localStorage.profile) {
+        data = $localStorage.profile;
+    }
     
     return ProfileService;
 }

@@ -1,0 +1,70 @@
+<md-content md-scroll-y flex class="md-padding" layout="row" layout-align="center" layout-wrap ng-cloak="">
+    <section flex-xs="90" flex-sm="90" flex-gt-sm="45">
+        <!--section height/weight/gender   -->
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Who are you ?</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <i class="material-icons">person</i>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content>
+                <form name="profileForm">
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Weight (kg)</label>
+                            <input ng-model="profile.weight" type="number" step="0.5">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Height (cm)</label>
+                            <input ng-model="profile.height" type="number" step="0.5">
+                        </md-input-container>
+                    </div>
+                    <!--<md-divider></md-divider>-->
+                </form>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <!--<md-button ng-click="addItem($event, item)">Add</md-button>-->
+                <!--<md-button ng-click="showItemInfo($event, item)">Info</md-button>-->
+            </md-card-actions>
+        </md-card>
+    </section>
+    <section flex-xs="90" flex-sm="90" flex-gt-sm="45">
+        <!--section height/weight/gender   -->
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Who are you ?</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <i class="material-icons">person</i>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content>
+                <form name="profileForm">
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Weight (kg)</label>
+                            <input ng-model="profile.weight" type="number" step="0.5">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Height (cm)</label>
+                            <input ng-model="profile.height" type="number" step="0.5">
+                        </md-input-container>
+                    </div>
+                    <!--<md-divider></md-divider>-->
+                </form>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <!--<md-button ng-click="addItem($event, item)">Add</md-button>-->
+                <!--<md-button ng-click="showItemInfo($event, item)">Info</md-button>-->
+            </md-card-actions>
+        </md-card>
+    </section>
+</md-content>

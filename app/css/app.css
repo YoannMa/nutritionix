@@ -1,5 +1,5 @@
 md-card md-card-title md-card-title-text {
-    margin-right : 25px;
+    margin-right: 25px;
 }
 
 /**
@@ -7,4 +7,29 @@ md-card md-card-title md-card-title-text {
  */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
+}
+
+.menu .md-button {
+    border-radius: 0;
+    display: block;
+    vertical-align: middle;
+    align-items: inherit;
+    line-height: 40px;
+    margin: 0;
+    overflow: hidden;
+    padding: 20px 16px;
+    text-align: left;
+    text-decoration: none;
+    white-space: normal;
+    width: 100%;
+}
+
+.menu {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu i {
+    vertical-align: middle;
 }

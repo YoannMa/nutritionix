@@ -18,59 +18,64 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 </head>
 <body layout="row" ng-cloak>
-    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
-                md-is-locked-open="$mdMedia('gt-sm')" md-disable-backdrop="" md-whiteframe="4">
-        <header>
-            <md-toolbar class="md-hue-2 main-toolbar" md-whiteframe="4">
-                <div class="md-toolbar-tools">
-                    <h1 class="md-heading" flex>Nutritionix</h1>
-                </div>
-            </md-toolbar>
-        </header>
-        <section layout="row" layout-wrap ng-controller="MenuCtrl">
-            <ul class="side-menu">
-                <li flex="100" ng-repeat="item in menu">
-                    <a class="md-button md-ink-ripple" ng-href="{{ item.url }}">
-                        <i layout-align="center center"  class="material-icons">{{ item.icone }}</i><span layout-align="center center">{{item.title}}</span>
-                    </a>
-                </li>
-            </ul>
-        </section>
-    </md-sidenav>
-
-    <div layout="column" tabIndex="-1" role="main" flex>
-        <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
-            <div class="md-toolbar-tools" tabIndex="-1">
-                <md-button class="md-icon-button" aria-label="Toggle Menu" layout-align="center center" hide-gt-sm>
-                    <i class="material-icons">menu</i>
-                </md-button>
-                <div layout="row" flex class="fill-height">
-                    <h2 class="md-toolbar-item md-headline">Search</h2>
-                </div>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
+            md-is-locked-open="$mdMedia('gt-sm')" md-disable-backdrop="" md-whiteframe="4">
+    <header>
+        <md-toolbar class="md-hue-2 main-toolbar" md-whiteframe="4">
+            <div class="md-toolbar-tools">
+                <h1 class="md-heading" flex>Nutritionix</h1>
             </div>
         </md-toolbar>
-        <md-content md-scroll-y layout="column" flex>
-            <div ng-view flex="noshrink" class="docs-ng-view"></div>
-        </md-content>
-    </div>
+    </header>
+    <section layout="row" layout-wrap ng-controller="MenuCtrl">
+        <ul layout-fill class="side-menu menu">
+            <li layout="column" ng-repeat="item in menu">
+                <md-button layout="column" class="md-button md-ink-ripple" ng-href="{{ item.url }}">
+                    <i class="material-icons">{{ item.icone }}</i>
+                    <span>{{item.title}}</span>
+                </md-button>
+                <md-divider ng-if="!$last"></md-divider>
+            </li>
+        </ul>
+    </section>
+</md-sidenav>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
-    <script src="//cdn.rawgit.com/nutritionix/library-angular/master/angular-nutritionix-api.js"></script>
-    <script src="app/app.js"></script>
-    <script src="app/searchView/controller.js"></script>
-    <script src="app/components/version/version.js"></script>
-    <script src="app/components/version/version-directive.js"></script>
-    <script src="app/components/version/interpolate-filter.js"></script>
-    <script src="app/components/pagination/pagination.js"></script>
-    <script src="app/components/dialogs/infoDialog.js"></script>
-    <script src="app/components/dialogs/quantityDialog.js"></script>
-    <script src="app/components/pantry/pantry.service.js"></script>
-    <script src="app/components/profile/profile.service.js"></script>
-    <script src="app/components/menu/menu.js"></script>
+<div layout="column" tabIndex="-1" role="main" flex>
+    <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+        <div class="md-toolbar-tools" tabIndex="-1">
+            <md-button class="md-icon-button" aria-label="Toggle Menu" layout-align="center center" hide-gt-sm>
+                <i class="material-icons">menu</i>
+            </md-button>
+            <div layout="row" flex class="fill-height">
+                <h2 class="md-toolbar-item md-headline">Search</h2>
+            </div>
+        </div>
+    </md-toolbar>
+    <md-content md-scroll-y layout="column" flex>
+        <div ng-view flex="noshrink"></div>
+    </md-content>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+<script src="app/components/nutritionix/nutritionix.js"></script>
+<script src="app/app.js"></script>
+<script src="app/searchView/controller.js"></script>
+<script src="app/profileView/controller.js"></script>
+<script src="app/pantryView/controller.js"></script>
+<script src="app/components/version/version.js"></script>
+<script src="app/components/version/version-directive.js"></script>
+<script src="app/components/version/interpolate-filter.js"></script>
+<script src="app/components/pagination/pagination.js"></script>
+<script src="app/components/dialogs/infoDialog.js"></script>
+<script src="app/components/dialogs/quantityDialog.js"></script>
+<script src="app/components/pantry/pantry.service.js"></script>
+<script src="app/components/profile/profile.service.js"></script>
+<script src="app/components/menu/menu.js"></script>
 </body>
 </html>
