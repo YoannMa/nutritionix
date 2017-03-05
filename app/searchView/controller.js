@@ -49,15 +49,11 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial', 'nutritionix
             
             $scope.reloadListResults = function () {
                 var bulkSize = 24;
-                nutritionixApi.search($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
-                    .success(function (search) {
-                        $scope.foundResults = search.results;
-                        $scope.paging.total = Math.floor(Math.min(search.total / bulkSize, (1000 / bulkSize) + 1));
-                        // Math.min is used to limit the offset to 1000, the API won't respond if the offset is superior from 1000
-                    });
                 nutritionixApi.searchV1($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
                     .success(function (search) {
                         console.log(search);
+                        $scope.foundResults = search.hits;
+                        $scope.paging.total = Math.floor(search.total / bulkSize);
                     });
             };
             
@@ -81,6 +77,10 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial', 'nutritionix
             if ($location.search().item && $location.search().item !== '') {
                 $scope.reloadListResults();
             }
+            
+            $scope.isAlreadyInPantry = function (item) {
+                return PantryService.isInPantry(item._id);
+            };
             
             $scope.addItem = function (ev, item) {
                 $mdDialog.show(

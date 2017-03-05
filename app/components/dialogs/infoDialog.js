@@ -17,8 +17,8 @@ function InfoDialog($mdDialogProvider) {
     });
 }
 
-InfoDialogController.$inject = [ '$scope', '$mdDialog', 'item' ];
-function InfoDialogController($scope, $mdDialog, item) {
+InfoDialogController.$inject = [ '$scope', '$mdDialog', 'item', 'PantryService' ];
+function InfoDialogController($scope, $mdDialog, item, PantryService) {
     
     // todo fetch more info about the item
     
@@ -33,7 +33,7 @@ function InfoDialogController($scope, $mdDialog, item) {
                 }
             })
         ).then(function (quantity) {
-            console.log(quantity);
+            PantryService.add(item, quantity);
         });
     };
     $scope.cancel = $mdDialog.cancel;

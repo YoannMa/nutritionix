@@ -31,6 +31,29 @@ angular.module('nutritionix.pantryView', [ 'ngRoute', 'ngMaterial', 'nutritionix
                 );
             };
             
+            $scope.more = function (item) {
+                PantryService.add(item, 1);
+                hydrateData();
+            };
+            $scope.less = function (item) {
+                PantryService.remove(item, 1);
+                hydrateData();
+            };
+            
+            $scope.changeQuantity = function (ev, item) {
+                $mdDialog.show(
+                    $mdDialog.quantityDialog({
+                        targetEvent : ev,
+                        locals      : {
+                            item : item
+                        }
+                    })
+                ).then(function (quantity) {
+                    PantryService.setQuantity(item._id, quantity);
+                    hydrateData();
+                });
+            };
+            
             $scope.deleteItem = function (ev, item) {
                 $mdDialog.show(
                     $mdDialog.confirm()

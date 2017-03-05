@@ -20,7 +20,7 @@ function QuantityDialog($mdDialogProvider) {
 QuantityDialogController.$inject = [ '$scope', '$mdDialog', 'item' ];
 function QuantityDialogController($scope, $mdDialog, item) {
     $scope.item     = item;
-    $scope.quantity = 1;
+    $scope.quantity = item.quantity || 1;
     $scope.hide     = $mdDialog.cancel;
     $scope.cancel   = $mdDialog.cancel;
     $scope.answer   = function () {

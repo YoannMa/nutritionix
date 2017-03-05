@@ -14,17 +14,17 @@ function PantryService($localStorage) {
         if (typeof aliment !== 'object') {
             throw Error('aliment must be an object');
         }
-        if (!aliment.resource_id || typeof aliment.resource_id !== 'string') {
-            throw Error('aliment must have a resource_id');
+        if (!aliment._id || typeof aliment._id !== 'string') {
+            throw Error('aliment must have a _id');
         }
-        if (aliments[ aliment.resource_id ]) { // already exist in the pantry
-            aliments[ aliment.resource_id ].quantity += quantity;
+        if (aliments[ aliment._id ]) { // already exist in the pantry
+            aliments[ aliment._id ].quantity += quantity;
         } else {
-            aliments[ aliment.resource_id ]          = aliment;
-            aliments[ aliment.resource_id ].quantity = quantity;
+            aliments[ aliment._id ]          = aliment;
+            aliments[ aliment._id ].quantity = quantity;
         }
         this.sync();
-        return aliments[ aliment.resource_id ];
+        return aliments[ aliment._id ];
     };
     
     /**
@@ -38,29 +38,42 @@ function PantryService($localStorage) {
         if (typeof aliment !== 'object') {
             throw Error('aliment must be an object');
         }
-        if (!aliment.resource_id || typeof aliment.resource_id !== 'string') {
-            throw Error('aliment must have a resource_id');
+        if (!aliment._id || typeof aliment._id !== 'string') {
+            throw Error('aliment must have a _id');
         }
-        if (aliments[ aliment.resource_id ]) { // already exist in the pantry
+        if (aliments[ aliment._id ]) { // already exist in the pantry
             if (!quantity) {
-                delete aliments[ aliment.resource_id ];
+                delete aliments[ aliment._id ];
             } else {
                 if (quantity <= 0) {
                     throw Error('Quantity cannot be <= 0');
                 }
-                if (aliments[ aliment.resource_id ].quantity - quantity <= 0) {
-                    delete aliments[ aliment.resource_id ];
+                if (aliments[ aliment._id ].quantity - quantity <= 0) {
+                    delete aliments[ aliment._id ];
                 }
-                aliments[ aliment.resource_id ].quantity -= quantity;
+                aliments[ aliment._id ].quantity -= quantity;
             }
         }
         this.sync();
-        return aliments[ aliment.resource_id ];
+        return aliments[ aliment._id ];
+    };
+    
+    PantryService.isInPantry = function (id) {
+        return aliments.hasOwnProperty(id);
     };
     
     PantryService.getFromID = function (id) {
         if (aliments[ id ]) {
             return aliments[ id ];
+        }
+    };
+    
+    PantryService.setQuantity = function (id, quantity) {
+        if (aliments[ id ] && quantity >= 0) {
+            aliments[ id ].quantity = quantity;
+            if (quantity === 0) {
+                this.remove(aliments[id]);
+            }
         }
     };
     
@@ -74,19 +87,19 @@ function PantryService($localStorage) {
     
     PantryService.calories = function () {
         return this.getAll().reduce(function (calories, item) {
-            return calories + item.nf_calories * item.quantity;
+            return calories + item.fields.nf_calories * item.quantity;
         }, 0);
     };
     
     PantryService.sodium = function () {
         return this.getAll().reduce(function (calories, item) {
-                return calories + item.nf_sodium * item.quantity;
+                return calories + item.fields.nf_sodium * item.quantity;
             }, 0) / 100;
     };
     
     PantryService.saturatedFat = function () {
         return this.getAll().reduce(function (calories, item) {
-            return calories + item.nf_saturated_fat * item.quantity;
+            return calories + item.fields.nf_saturated_fat * item.quantity;
         }, 0);
     };
     
