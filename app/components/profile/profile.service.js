@@ -2,9 +2,9 @@
 
 angular.module('nutritionix.profile', [ 'ngStorage' ]).factory('ProfileService', ProfileService);
 
-ProfileService.$inject = [ '$localStorage' ];
+ProfileService.$inject = [ '$localStorage', '$rootScope' ];
 
-function ProfileService($localStorage) {
+function ProfileService($localStorage, $rootScope) {
     var data = {
         gender   : true, // true = male
         age      : 19,
@@ -50,6 +50,7 @@ function ProfileService($localStorage) {
     };
     
     ProfileService.sync = function () {
+        $rootScope.$broadcast('profile:updated');
         $localStorage.profile = data;
     };
     

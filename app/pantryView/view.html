@@ -3,6 +3,7 @@
         <md-card-title>
             <md-card-title-text>
                 <span class="md-headline">Current items in your pantry</span>
+                <span class="md-subhead">The blue gradient tie to the calories percentage</span>
             </md-card-title-text>
             <md-card-title-media>
                 <i class="material-icons">person</i>
@@ -17,8 +18,28 @@
                         ng-click="showItemInfo($event, item)"
                 >
                     <div class="md-list-item-text" layout="column">
-                        <h3>{{ item.fields.item_name }}</h3>
+                        <h3 class="title">{{ item.fields.item_name }}</h3>
                         <h4>{{ item.fields.brand_name }}</h4>
+                        <section>
+                            <section layout="row">
+                                <span flex="nogrow">Calories per unit : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_calories, 2) }} kcal</span>
+                                <span flex="nogrow">Total calories : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_calories * item.quantity, 2) }} kcal ({{ getPercentageCaloriesOfThePantry(item) }}%)</span>
+                            </section>
+                            <section layout="row">
+                                <span flex="nogrow">Sodium per unit : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_sodium / 1000, 3) }} g</span>
+                                <span flex="nogrow">Total sodium : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_sodium * item.quantity / 1000, 3) }} g ({{ getPercentageSodiumOfThePantry(item) }}%)</span>
+                            </section>
+                            <section layout="row">
+                                <span flex="nogrow">Saturated fat per unit : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_saturated_fat, 3) }} g</span>
+                                <span flex="nogrow">Total saturated fat : </span>
+                                <span flex ng-style="{'padding-left' : '10px'}">{{ floor(item.fields.nf_saturated_fat * item.quantity, 3) }} g ({{ getPercentageSaturatedFatOfThePantry(item) }}%)</span>
+                            </section>
+                        </section>
                     </div>
                     <div class="md-secondary-container">
                         <div layout="column">
@@ -31,9 +52,6 @@
                     <md-divider ng-if="!$last"></md-divider>
                 </md-list-item>
             </md-list>
-            <section>
-
-            </section>
         </md-card-content>
     </md-card>
 </md-content>

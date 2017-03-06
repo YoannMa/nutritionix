@@ -37,9 +37,18 @@ md-card md-card-title md-card-title-text {
 .already-in-pantry {
     background: #dcffdc;
 }
-
 .md-list-item-text {
     padding: 12px 0;
+}
+
+md-list md-list-item .md-list-item-inner .md-list-item-text h3.title {
+    font-weight: 500; !important;
+}
+
+.md-list-item-text > section {
+    border-top: 1px solid #C3C3C3;
+    margin: 20px;
+    padding-top: 10px;
 }
 
 md-chips.md-default-theme .md-chips, md-chips .md-chips {

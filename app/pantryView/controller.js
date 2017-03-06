@@ -39,8 +39,12 @@ angular.module('nutritionix.pantryView', [ 'ngRoute', 'ngMaterial', 'nutritionix
                 hydrateData();
             };
             $scope.less = function (item) {
-                PantryService.remove(item, 1);
-                hydrateData();
+                if (item.quantity <= 1) {
+                    $scope.deleteItem(null, item);
+                } else {
+                    PantryService.remove(item, 1);
+                    hydrateData();
+                }
             };
             
             $scope.changeQuantity = function (ev, item) {
@@ -57,18 +61,34 @@ angular.module('nutritionix.pantryView', [ 'ngRoute', 'ngMaterial', 'nutritionix
                 });
             };
             
+            $scope.getPercentageCaloriesOfThePantry = function (item) {
+                return Math.floor((item.fields.nf_calories * item.quantity) / $scope.calories * 100);
+            };
+            
+            $scope.getPercentageSodiumOfThePantry = function (item) {
+                return Math.floor((item.fields.nf_sodium / 1000 * item.quantity) / $scope.sodium * 100);
+            };
+            
+            $scope.getPercentageSaturatedFatOfThePantry = function (item) {
+                return Math.floor((item.fields.nf_saturated_fat * item.quantity) / $scope.saturatedFat * 100);
+            };
+            
             $scope.getGradientStyle = function (item) {
-                var percentage = Math.floor((item.fields.nf_calories * item.quantity) / $scope.calories * 100);
+                var percentage = $scope.getPercentageCaloriesOfThePantry(item);
                 return {
                     'background' : 'linear-gradient(to right, rgba(230, 230, 255, 1) 0%, rgba(230, 230, 255, 1) ' + percentage + '%, transparent ' + percentage + '%)'
                 }
+            };
+            
+            $scope.floor = function (number, dec) {
+                return Math.floor(number * Math.pow(10, dec)) / Math.pow(10, dec);
             };
             
             $scope.deleteItem = function (ev, item) {
                 $mdDialog.show(
                     $mdDialog.confirm()
                         .title('Please confirm')
-                        .textContent('Are you sure you want to remove ' + item.item_name + ' from your pantry ?')
+                        .textContent('Are you sure you want to remove ' + item.fields.item_name + ' from your pantry ?')
                         .ariaLabel('confirmation deletion')
                         .targetEvent(ev)
                         .ok('Yes')

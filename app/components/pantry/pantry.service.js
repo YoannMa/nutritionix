@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('nutritionix.pantry', [ 'ngStorage' ]).factory('PantryService', PantryService);
+angular.module('nutritionix.pantry', [ 'ngStorage', 'nutritionix.profile' ]).factory('PantryService', PantryService);
 
-PantryService.$inject = [ '$localStorage' ];
+PantryService.$inject = [ '$localStorage', '$rootScope', 'ProfileService' ];
 
-function PantryService($localStorage) {
+function PantryService($localStorage, $rootScope, ProfileService) {
     var aliments = {};
     
     PantryService.add = function (aliment, quantity) {
@@ -50,8 +50,9 @@ function PantryService($localStorage) {
                 }
                 if (aliments[ aliment._id ].quantity - quantity <= 0) {
                     delete aliments[ aliment._id ];
+                } else {
+                    aliments[ aliment._id ].quantity -= quantity;
                 }
-                aliments[ aliment._id ].quantity -= quantity;
             }
         }
         this.sync();
@@ -72,7 +73,7 @@ function PantryService($localStorage) {
         if (aliments[ id ] && quantity >= 0) {
             aliments[ id ].quantity = quantity;
             if (quantity === 0) {
-                this.remove(aliments[id]);
+                this.remove(aliments[ id ]);
             }
         }
     };
@@ -82,6 +83,7 @@ function PantryService($localStorage) {
     };
     
     PantryService.sync = function () {
+        $rootScope.$broadcast('pantry:updated');
         $localStorage.pantry = aliments;
     };
     
@@ -94,13 +96,17 @@ function PantryService($localStorage) {
     PantryService.sodium = function () {
         return this.getAll().reduce(function (calories, item) {
                 return calories + item.fields.nf_sodium * item.quantity;
-            }, 0) / 100;
+            }, 0) / 1000;
     };
     
     PantryService.saturatedFat = function () {
         return this.getAll().reduce(function (calories, item) {
             return calories + item.fields.nf_saturated_fat * item.quantity;
         }, 0);
+    };
+    
+    PantryService.isWarning = function () {
+        return this.sodium() > ProfileService.getMaxSodium() || this.calories() > ProfileService.getMaxCalories();
     };
     
     if ($localStorage.pantry) {
