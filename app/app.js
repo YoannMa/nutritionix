@@ -28,7 +28,7 @@ angular.module('nutritionix', [
         //nutritionixApiProvider.setApiCredentials('db67f640', '6d3a917f26933266438f8c90c4fb061f'); // App3 (not mine, nutritionix demo app)
         //nutritionixApiProvider.setApiCredentials('51d31f2b', '0af0130e116927468561ae1f536068d2'); // App4
     
-        MenuProvider.add({
+        MenuProvider.add({ // hydrate the menu with the different route
             url   : '#/search',
             icone : 'search',
             title : 'Search aliment'
@@ -44,8 +44,4 @@ angular.module('nutritionix', [
             title : 'Change your profile'
         });
     }
-])
-.constant('_', window._)
-.run(function ($rootScope) {
-    $rootScope._ = window._;
-});
+]).constant('_', window._); // yeah lodash is great

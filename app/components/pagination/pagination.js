@@ -23,71 +23,88 @@
  * Based on Crawlink version, modified by Yoannma
  */
 
-(function () {
-    'use strict';
+var app = angular.module("pagination", []);
+
+app.directive('pagination', PaginationDirective);
+
+PaginationDirective.$inject = [];
+function PaginationDirective() {
+    return {
+        restrict     : 'EA',
+        scope        : { // parameters given to component
+            ymPages        : '=', // nbr of page
+            ymAlignModel   : '=', // alignment (design)
+            ymPageChanged  : '&', // method to call when the page is changed
+            ymNbrPageShown : '=', // nbr of page number to show
+            ymCurrentPage  : '='  // current page
+        },
+        controller   : PaginationController,
+        controllerAs : 'controller',
+        template     : [
+            '<md-button class="md-icon-button md-raised md-warn" aria-label="First" ng-hide="pageArray().shift() == 1" ng-click="gotoFirst()"><i class="material-icons">first_page</i></md-button>',
+            '<md-button class="md-icon-button md-raised md-primary" aria-label="Previous" ng-click="gotoPrev()" ng-show="ymCurrentPage > 1"><i class="material-icons">navigate_before</i></md-button>',
+            '<md-button class="md-icon-button md-raised" aria-label="Go to page {{ i }}" ng-repeat="i in pageArray()" ng-click="goto(i)" ng-class="{\'md-primary\': i == ymCurrentPage}"> {{ i }} </md-button>',
+            '<md-button class="md-icon-button md-raised md-primary" aria-label="Next" ng-click="gotoNext()" ng-show="ymCurrentPage < ymPages"><i class="material-icons">navigate_next</i></md-button>',
+            '<md-button class="md-icon-button md-raised md-warn" aria-label="Last" ng-click="gotoLast()" ng-hide="pageArray().pop() == ymPages"><i class="material-icons">last_page</i></md-button>',
+        ].join('')
+    };
+}
+
+PaginationController.$inject = [ '$scope' ];
+function PaginationController($scope) {
     
-    var app = angular.module("pagination", []);
+    /**
+     * Custom function to create an array of page number
+     */
+    $scope.pageArray = function () {
+        var nbr = parseInt($scope.ymNbrPageShown);
+        
+        return _.intersection(
+            _.range(Math.max($scope.ymCurrentPage - nbr, 1), $scope.ymCurrentPage + (nbr + 2)),
+            _.range($scope.ymCurrentPage - (nbr + 1), Math.min(parseInt($scope.ymPages) + 1, parseInt($scope.ymCurrentPage) + (nbr + 1)))
+        );
+    };
     
-    app.directive('pagination', PaginationDirective);
+    /**
+     * Change to page X
+     * @param page
+     */
+    $scope.goto = function (page) {
+        $scope.ymCurrentPage = page;
+    };
     
-    PaginationDirective.$inject = [];
-    function PaginationDirective() {
-        return {
-            restrict     : 'EA',
-            scope        : {
-                ymPages        : '=',
-                ymAlignModel   : '=',
-                ymPageChanged  : '&',
-                ymNbrPageShown : '=',
-                ymCurrentPage  : '='
-            },
-            controller   : PaginationController,
-            controllerAs : 'vm',
-            template     : [
-                '<md-button class="md-icon-button md-raised md-warn" aria-label="First" ng-hide="vm.pageArray().shift() == 1" ng-click="vm.gotoFirst()"><i class="material-icons">first_page</i></md-button>',
-                '<md-button class="md-icon-button md-raised md-primary" aria-label="Previous" ng-click="vm.gotoPrev()" ng-show="ymCurrentPage > 1"><i class="material-icons">navigate_before</i></md-button>',
-                '<md-button class="md-icon-button md-raised" aria-label="Go to page {{ i }}" ng-repeat="i in vm.pageArray()" ng-click="vm.goto(i)" ng-class="{\'md-primary\': i == ymCurrentPage}"> {{ i }} </md-button>',
-                '<md-button class="md-icon-button md-raised md-primary" aria-label="Next" ng-click="vm.gotoNext()" ng-show="ymCurrentPage < ymPages"><i class="material-icons">navigate_next</i></md-button>',
-                '<md-button class="md-icon-button md-raised md-warn" aria-label="Last" ng-click="vm.gotoLast()" ng-hide="vm.pageArray().pop() == ymPages"><i class="material-icons">last_page</i></md-button>',
-            ].join('')
-        };
-    }
+    /**
+     * Go to previous page
+     */
+    $scope.gotoPrev = function () {
+        $scope.ymCurrentPage--;
+    };
     
-    PaginationController.$inject = [ '$scope' ];
-    function PaginationController($scope) {
-        var vm = this;
-        
-        vm.pageArray = function () {
-            var nbr = parseInt($scope.ymNbrPageShown);
-            
-            return _.intersection(
-                _.range(Math.max($scope.ymCurrentPage - nbr, 1), $scope.ymCurrentPage + (nbr + 2)),
-                _.range($scope.ymCurrentPage - (nbr + 1), Math.min(parseInt($scope.ymPages) + 1, parseInt($scope.ymCurrentPage) + (nbr + 1)))
-            );
-        };
-        
-        vm.goto = function (page) {
-            $scope.ymCurrentPage = page;
-        };
-        
-        vm.gotoPrev = function () {
-            $scope.ymCurrentPage--;
-        };
-        
-        vm.gotoNext = function () {
-            $scope.ymCurrentPage++;
-        };
-        
-        vm.gotoFirst = function () {
-            $scope.ymCurrentPage = 1;
-        };
-        
-        vm.gotoLast = function () {
-            $scope.ymCurrentPage = $scope.ymPages;
-        };
-        
-        $scope.$watch('ymCurrentPage', function () {
-            $scope.ymPageChanged();
-        });
-    }
-})();
+    /**
+     * Go to next page
+     */
+    $scope.gotoNext = function () {
+        $scope.ymCurrentPage++;
+    };
+    
+    /**
+     * Go to first page
+     */
+    $scope.gotoFirst = function () {
+        $scope.ymCurrentPage = 1;
+    };
+    
+    /**
+     * Go to last page
+     */
+    $scope.gotoLast = function () {
+        $scope.ymCurrentPage = $scope.ymPages;
+    };
+    
+    /**
+     * Watch current page
+     */
+    $scope.$watch('ymCurrentPage', function () {
+        $scope.ymPageChanged();
+    });
+}

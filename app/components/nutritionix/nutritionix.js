@@ -317,7 +317,15 @@
                 return nutritionixApi('/search', { params : params });
                 
             };
-            
+    
+            /**
+             * Search a list of item in nutritionix database.
+             *
+             * @param {string} q The search phrase in plain text.
+             * @param {number} [limit]  Maximum results in response Requires offset
+             * @param {number} [offset] Search offset for paging through results Requires limit
+             * @param {object} [filter] Filter object with min and max value for calories.
+             */
             nutritionixApi.searchV1 = function (q, limit, offset, filter) {
                 var jsonConfig = {
                     'appId'  : credentials.appId,
@@ -329,7 +337,15 @@
                 };
                 
                 if (filter) {
-                
+                    jsonConfig.filters = {
+                        'nf_calories' : {}
+                    };
+                    if (filter.min > 0) {
+                        jsonConfig.filters.nf_calories.from = filter.min;
+                    }
+                    if (filter.max > 0) {
+                        jsonConfig.filters.nf_calories.to = filter.max;
+                    }
                 }
                 
                 return $http.post(apiEndPointV1 + '/search', jsonConfig);

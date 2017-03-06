@@ -5,6 +5,12 @@ angular.module('nutritionix.profile', [ 'ngStorage' ]).factory('ProfileService',
 ProfileService.$inject = [ '$localStorage', '$rootScope' ];
 
 function ProfileService($localStorage, $rootScope) {
+    
+    /**
+     * Well, i store data here, like the profile data
+     *
+     * @type {{gender: boolean, age: number, sportive: boolean}}
+     */
     var data = {
         gender   : true, // true = male
         age      : 19,
@@ -26,6 +32,11 @@ function ProfileService($localStorage, $rootScope) {
         data.gender = gender === 'male';
         this.sync();
     };
+    
+    /**
+     * I'll not create the doc for the get/set, the only thing you need to know is the when i use a set method, i sync with the local storage.
+     */
+    
     
     ProfileService.getGender = function () {
         return data.gender ? 'male' : 'female';
@@ -49,15 +60,19 @@ function ProfileService($localStorage, $rootScope) {
         return data.sportive;
     };
     
-    ProfileService.sync = function () {
-        $rootScope.$broadcast('profile:updated');
-        $localStorage.profile = data;
-    };
-    
+    /**
+     * This one is tricky, it's only if the WHO start to explain that a kid need less sodium than adult.
+     *
+     * @return {number}
+     */
     ProfileService.getMaxSodium = function () {
         return 5;
     };
     
+    /**
+     *
+     * @return {number}
+     */
     ProfileService.getMaxCalories = function () {
         var base = data.sportive ? 500 : 0;
         
@@ -73,6 +88,17 @@ function ProfileService($localStorage, $rootScope) {
         return base + (data.gender ? 2000 : 1800);
     };
     
+    /**
+     * Sync with the local storage and emit an event.
+     */
+    ProfileService.sync = function () {
+        $rootScope.$broadcast('profile:updated');
+        $localStorage.profile = data;
+    };
+    
+    /**
+     * fetch from local storage if needed
+     */
     if ($localStorage.profile) {
         data = $localStorage.profile;
     }

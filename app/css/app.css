@@ -58,3 +58,15 @@ md-chips.md-default-theme .md-chips, md-chips .md-chips {
 .md-button.md-default-theme.md-warn, .md-button.md-green {
     color: #4CAF50;
 }
+
+body > div.layout-column.flex > md-content > div > section > md-card > form > div > md-autocomplete {
+    height: 72px;
+}
+
+body > div.layout-column.flex > md-content > div > section > md-card > form > div > section > md-input-container {
+    margin: 16px 0 0 20px;
+}
+
+body > div.layout-column.flex > md-content > div > section > md-card > form > div > section > md-switch {
+    padding-left: 16px;
+}
