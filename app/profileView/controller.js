@@ -14,9 +14,31 @@ angular.module('nutritionix.profileView', [ 'ngRoute', 'nutritionix.profile' ])
         '$location',
         'ProfileService',
         function ($scope, $location, ProfileService) {
-            $scope.profile = {
-                weight : 0,
-                height : 0
+            function updateInfo() {
+                $scope.profile = {
+                    gender   : ProfileService.getGender(),
+                    age      : ProfileService.getAge(),
+                    sportive : ProfileService.getSportive(),
+                    calories : ProfileService.getMaxCalories(),
+                    sodium   : ProfileService.getMaxSodium(),
+                }
             }
+            
+            $scope.$watch('profile.gender', function (gender) {
+                ProfileService.setGender(gender);
+                updateInfo();
+            });
+            
+            $scope.$watch('profile.age', function (age) {
+                ProfileService.setAge(age);
+                updateInfo();
+            });
+            
+            $scope.$watch('profile.sportive', function (sportive) {
+                ProfileService.setSportive(sportive);
+                updateInfo();
+            });
+    
+            updateInfo();
         }
     ]);

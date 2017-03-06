@@ -6,33 +6,12 @@ ProfileService.$inject = [ '$localStorage' ];
 
 function ProfileService($localStorage) {
     var data = {
-        weight   : 0,
-        height   : 0,
-        gender   : true,
-        age      : 0,
+        gender   : true, // true = male
+        age      : 19,
         sportive : true
     };
     
-    ProfileService.setWeight = function (weight) {
-        data.weight = weight;
-        this.sync();
-    };
-    
-    ProfileService.getWeight = function () {
-        return data.weight;
-    };
-    
-    ProfileService.setHeight = function (height) {
-        data.height = height;
-        this.sync();
-    };
-    
-    ProfileService.getHeight = function () {
-        return data.height;
-    };
-    
     /**
-     *
      * I sexually Identify as an Attack Helicopter.
      * Ever since I was a boy I dreamed of soaring over the oilfields dropping hot sticky loads on disgusting foreigners.
      * People say to me that a person being a helicopter is Impossible and I’m fucking retarded but I don’t care, I’m beautiful.
@@ -44,12 +23,12 @@ function ProfileService($localStorage) {
      * @param gender
      */
     ProfileService.setGender = function (gender) {
-        data.gender = gender;
+        data.gender = gender === 'male';
         this.sync();
     };
     
     ProfileService.getGender = function () {
-        return data.gender;
+        return data.gender ? 'male' : 'female';
     };
     
     ProfileService.setAge = function (age) {
@@ -74,9 +53,29 @@ function ProfileService($localStorage) {
         $localStorage.profile = data;
     };
     
+    ProfileService.getMaxSodium = function () {
+        return 5;
+    };
+    
+    ProfileService.getMaxCalories = function () {
+        var base = data.sportive ? 500 : 0;
+        
+        if (data.age <= 10) {
+            return base + 1600;
+        }
+        if (data.age <= 20) {
+            return base + (data.gender ? 2900 : 2400);
+        }
+        if (data.age <= 65) {
+            return base + (data.gender ? 2800 : 2200);
+        }
+        return base + (data.gender ? 2000 : 1800);
+    };
+    
     if ($localStorage.profile) {
         data = $localStorage.profile;
     }
+    
     
     return ProfileService;
 }

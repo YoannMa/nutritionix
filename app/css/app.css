@@ -38,7 +38,7 @@ md-card md-card-title md-card-title-text {
     background: #dcffdc;
 }
 
-md-list-item.md-2-line .md-list-item-text, md-list-item.md-2-line > .md-no-style .md-list-item-text, md-list-item.md-3-line .md-list-item-text, md-list-item.md-3-line > .md-no-style .md-list-item-text {
+.md-list-item-text {
     padding: 12px 0;
 }
 
@@ -46,6 +46,6 @@ md-chips.md-default-theme .md-chips, md-chips .md-chips {
     box-shadow: none;
 }
 
-.list-item {
-
+.md-button.md-default-theme.md-warn, .md-button.md-green {
+    color: #4CAF50;
 }

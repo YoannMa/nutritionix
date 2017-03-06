@@ -19,9 +19,6 @@ function InfoDialog($mdDialogProvider) {
 
 InfoDialogController.$inject = [ '$scope', '$mdDialog', 'item', 'PantryService' ];
 function InfoDialogController($scope, $mdDialog, item, PantryService) {
-    
-    // todo fetch more info about the item
-    
     $scope.item   = item;
     $scope.hide   = $mdDialog.cancel;
     $scope.add    = function (ev) {

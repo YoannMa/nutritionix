@@ -10,22 +10,30 @@
         </md-card-title>
         <md-card-content>
             <md-list flex>
-                <md-list-item class="md-3-line" ng-repeat="item in items" ng-click="showItemInfo($event, item)">
+                <md-list-item
+                        ng-style="getGradientStyle(item)"
+                        class="md-3-line"
+                        ng-repeat="item in items"
+                        ng-click="showItemInfo($event, item)"
+                >
                     <div class="md-list-item-text" layout="column">
                         <h3>{{ item.fields.item_name }}</h3>
                         <h4>{{ item.fields.brand_name }}</h4>
                     </div>
                     <div class="md-secondary-container">
                         <div layout="column">
-                            <md-button class="md-secondary md-icon-button" ng-click="more(item)"><i class="material-icons">add</i></md-button>
+                            <md-button class="md-secondary md-icon-button md-warn" ng-click="less(item)"><i class="material-icons">remove</i></md-button>
                             <md-button class="md-secondary md-icon-button" ng-click="changeQuantity($event, item)">{{ item.quantity }}</md-button>
-                            <md-button class="md-secondary md-icon-button" ng-click="less(item)"><i class="material-icons">remove</i></md-button>
+                            <md-button class="md-secondary md-icon-button md-green" ng-click="more(item)"><i class="material-icons">add</i></md-button>
                         </div>
-                        <md-button class="md-secondary md-icon-button" ng-click="deleteItem($event, item)"><i class="material-icons">delete</i></md-button>
+                        <md-button class="md-secondary md-icon-button md-warn" ng-click="deleteItem($event, item)"><i class="material-icons">delete</i></md-button>
                     </div>
                     <md-divider ng-if="!$last"></md-divider>
                 </md-list-item>
             </md-list>
+            <section>
+
+            </section>
         </md-card-content>
     </md-card>
 </md-content>
