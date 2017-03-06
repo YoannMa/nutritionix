@@ -1,0 +1,67 @@
+<md-content md-scroll-y flex class="md-padding" layout="row" layout-align="center" layout-wrap ng-cloak="">
+    <section flex-xs="90" flex-sm="90" flex-gt-sm="45">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Who are you ?</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <i class="material-icons">person</i>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content>
+                <form name="profileForm">
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Age</label>
+                            <input ng-model="profile.age" type="number" step="1" min="1">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <label>Gender</label>
+                            <md-select name="gender" ng-model="profile.gender" required>
+                                <md-option value="male">Male</md-option>
+                                <md-option value="female">female</md-option>
+                            </md-select>
+                            <div class="errors" ng-messages="profileForm.gender.$error">
+                                <div ng-message="required">Required</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="grow" class="md-block">
+                            <md-switch flex ng-model="profile.sportive" md-invert class="md-primary" aria-label="sportive">
+                                Are you sportive ?
+                            </md-switch>
+                        </md-input-container>
+                    </div>
+
+                </form>
+            </md-card-content>
+        </md-card>
+    </section>
+    <section flex-xs="90" flex-sm="90" flex-gt-sm="45">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Your limits</span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <i class="material-icons">warning</i>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content layout="column">
+                <section class="md-padding" layout="row">
+                    <span flex>Max calories : </span>
+                    <span flex>{{ profile.calories }} kcal</span>
+                </section>
+                <md-divider></md-divider>
+                <section class="md-padding" layout="row">
+                    <span flex>Max sodium : </span>
+                    <span flex>{{ profile.sodium }} g</span>
+                </section>
+            </md-card-content>
+        </md-card>
+    </section>
+</md-content>

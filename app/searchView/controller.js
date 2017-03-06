@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
+angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial', 'nutritionix.pantry' ])
     .config([
         '$routeProvider', function ($routeProvider) {
             $routeProvider.when('/search', {
-                templateUrl : 'app/components/searchView/view.html',
+                templateUrl : 'app/searchView/view.html',
                 controller  : 'searchViewController'
             });
         }
@@ -12,9 +12,10 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
     .controller('searchViewController', [
         '$scope',
         '$location',
-        'nixApi',
+        'nutritionixApi',
         '$mdDialog',
-        function ($scope, $location, nixApi, $mdDialog) {
+        'PantryService',
+        function ($scope, $location, nutritionixApi, $mdDialog, PantryService) {
             $scope.searchText             = '';
             $scope.autoCompleteSearchText = '';
             $scope.selectedItem           = $location.search().item ? { text : $location.search().item } : undefined;
@@ -48,55 +49,50 @@ angular.module('nutritionix.searchView', [ 'ngRoute', 'ngMaterial' ])
             
             $scope.reloadListResults = function () {
                 var bulkSize = 24;
-                nixApi.search($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
+                nutritionixApi.searchV1($scope.selectedItem.text, bulkSize, ($scope.paging.current - 1) * bulkSize)
                     .success(function (search) {
-                        $scope.foundResults = search.results;
-                        $scope.paging.total = Math.floor(Math.min(search.total / bulkSize, (1000 / bulkSize) + 1));
-                        // Math.min is used to limit the offset to 1000, the API won't respond if the offset is superior from 1000
+                        console.log(search);
+                        $scope.foundResults = search.hits;
+                        $scope.paging.total = Math.floor(search.total / bulkSize);
                     });
             };
             
             $scope.autoCompleteQuerySearch = function (query) {
-                return nixApi.autocomplete(query).then(function (result) {
-                    return result.data
+                return nutritionixApi.autocomplete(query).then(function (result) {
+                    return _.sortBy(result.data, 'text');
                 });
             };
             
             $scope.showItemInfo = function (ev, item) {
-                $mdDialog.show({
-                    controller          : DialogController,
-                    templateUrl         : 'app/components/searchView/itemInfo.tmpl.html',
-                    parent              : angular.element(document.body),
-                    targetEvent         : ev,
-                    clickOutsideToClose : true,
-                    locals : {
-                        item : item
-                    }
-                })
-                    .then(function (answer) {
-                        console.log(answer);
-                    }, function () {
-                        $scope.status = 'You cancelled the dialog.';
-                    });
+                $mdDialog.show(
+                    $mdDialog.infoDialog({
+                        targetEvent : ev,
+                        locals      : {
+                            item : item
+                        }
+                    })
+                );
             };
             
             if ($location.search().item && $location.search().item !== '') {
                 $scope.reloadListResults();
             }
             
-            function DialogController($scope, $mdDialog, item) {
-                $scope.item = item;
-                $scope.hide = function () {
-                    $mdDialog.hide();
-                };
-                
-                $scope.cancel = function () {
-                    $mdDialog.cancel();
-                };
-                
-                $scope.answer = function (answer) {
-                    $mdDialog.hide(answer);
-                };
-            }
+            $scope.isAlreadyInPantry = function (item) {
+                return PantryService.isInPantry(item._id);
+            };
+            
+            $scope.addItem = function (ev, item) {
+                $mdDialog.show(
+                    $mdDialog.quantityDialog({
+                        targetEvent : ev,
+                        locals      : {
+                            item : item
+                        }
+                    })
+                ).then(function (quantity) {
+                    PantryService.add(item, quantity);
+                });
+            };
         }
     ]);
