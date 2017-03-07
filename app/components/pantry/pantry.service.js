@@ -111,6 +111,7 @@ function PantryService($localStorage, $rootScope, ProfileService) {
             if (quantity === 0) {
                 this.remove(aliments[ id ]);
             }
+            this.sync();
         }
     };
     
